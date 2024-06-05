@@ -1,0 +1,46 @@
+{% block content %}
+<div class="container">
+  <h1>Welcome</h1>
+  <div class="buttons">
+    <a href="/Admin" class="admin-button">Admin</a>
+    <a href="/Manager" class="manager-button">Manager</a>
+    <a href="/Employee" class="employee-button">Employee</a>
+  </div>
+</div>
+<style>
+  .container {
+  text-align: center;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+.admin-button,
+.manager-button,
+.employee-button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.admin-button {
+  background-color: #ff6347; /* Red */
+  color: #fff;
+}
+
+.manager-button {
+  background-color: #4682b4; /* Steel Blue */
+  color: #fff;
+}
+
+.employee-button {
+  background-color: #32cd32; /* Lime Green */
+  color: #fff;
+}
+
+</style>
+{% endblock content %}

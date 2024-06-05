@@ -1,0 +1,159 @@
+{% extends 'reimbursement/layouts/main.html' %}
+{% block title %}
+  Employee
+{% endblock title %} 
+ 
+{% block content %}
+<style>
+    body {
+        background-color: #ec8181; /* Change background color to light gray */
+    }
+  .add-items-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .add-items-button:hover {
+      background-color: #0056b3;
+  
+  }
+  .add-items-button{
+    margin-left: 42%;
+    margin-top: 10%;
+  }
+  .card{
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    width: 100%;
+  
+
+  }
+  .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+</style>
+</head>
+<body>
+    <div>
+        <button class="add-items-button" onclick="toggleCard()">Add Items</button>
+        <div class="container mt-5">
+            <div class="row">
+                {% for employee in employees %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title" style="font-weight: bold;">Employee name :{{ employee.employee_name }}</p>
+                            <p class="card-text"  style="font-weight: bold;">Employee Code: {{ employee.employee_code }}</p>
+                            <p class="card-text"  style="font-weight: bold;">Email: {{ employee.email }}</p>
+                            <div  class="mb-3"  style="font-weight: bold;">
+                                <a href="{{ employee.upload.url }}" class="btn btn-primary" download>Download Photo</a>
+                            </div> 
+                            <p class="card-text"  style="font-weight: bold;">Mobile Number: {{ employee.mobile_number }}</p>
+                            <p class="card-text"  style="font-weight: bold;">Description: {{ employee.description }}</p>
+                            <p class="card-text"  style="font-weight: bold;">Status:<span class="badge bg-info">{{ employee.status }}</span></h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        
+       
+        <div class="card" id="card" style="display: none;">
+            <form id="submission-form" method="post" enctype="multipart/form-data" style="padding: 20px;">
+                {% csrf_token %}
+                <div style="margin-bottom: 15px;">
+                    {{ form.employee_name.label_tag }}
+                    <div style="margin-top: 5px;">
+                        {{ form.employee_name }}
+                    </div>
+                </div>
+                <div style="margin-left: 25%;margin-top: -7.5%;">
+                    {{ form.employee_code.label_tag }}
+                    <div style="margin-top: 5px;">
+                        {{ form.employee_code }}
+                    </div>
+                </div>
+                <div style="margin-left: 50%;margin-top: -5.5%;">
+                    {{ form.email.label_tag }}
+                    <div style="margin-top: 0px;">
+                        {{ form.email }}
+                    </div>
+                </div>
+                <div style="margin-left: 75%;margin-top: -5.5%;">
+                    {{ form.mobile_number.label_tag }}
+                    <div style="margin-top: 5px;">
+                        {{ form.mobile_number }}
+                    </div>
+                </div>
+                <div style="margin-left: 0;margin-top: 5%;">
+                    {{ form.upload.label_tag }}
+                    <div style="margin-top: 5px;">
+                        {{ form.upload }}
+                    </div>
+                </div>
+                <div style="margin-left: 30%;margin-top: -5%;">
+                    {{ form.description.label_tag }}
+                    <div style="margin-top: 5px;">
+                        {{ form.description }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-left: 80%;margin-top: -30%;">Submit</button>
+            </form>
+        </div>
+        
+    </div>
+
+    <div id="submission-details"></div>
+
+    <script>
+      function toggleCard() {
+          var card = document.getElementById("card");
+          card.style.display = (card.style.display === "none") ? "block" : "none";
+      }
+  
+      document.getElementById("submission-form").addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent default form submission
+          
+          var formData = new FormData(this);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "{% url 'Employeepage' %}"); // Replace 'submit_form' with your actual view name
+          xhr.onreadystatechange = function() {
+              if (xhr.readyState === XMLHttpRequest.DONE) {
+                  if (xhr.status === 200) {
+                      var submissionDetails = document.getElementById("submission-details");
+                      submissionDetails.innerHTML = xhr.responseText;
+                      submissionDetails.style.display = "block";
+                      toggleCard(); // Hide the form after submission
+  
+                      // Clear the form fields after submission
+                      document.getElementById("submission-form").reset();
+                  } else {
+                      console.error("Error:", xhr.statusText);
+                  }
+              }
+          };
+          xhr.send(formData);
+      });
+  </script>
+  
+</body>
+{% endblock content %}

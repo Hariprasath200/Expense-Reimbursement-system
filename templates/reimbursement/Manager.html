@@ -1,0 +1,60 @@
+{% extends 'reimbursement/layouts/main.html' %}
+{% block title %}
+  Manager
+{% endblock title %} 
+ 
+{% block content %}
+
+<h1>Managerpage</h1>
+<style>
+    body {
+        background-color: #20fdf2; /* Change background color to light gray */
+    }
+    .card{
+        margin-inline-start: 20%;
+        margin-inline-end: -20%;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>
+      {% for employee in employees %}
+      <div class="col-md-4">
+          <div class="card">
+              <div class="card-body">
+                  <p class="card-title" style="font-weight: bold;">Employee name: {{ employee.employee_name }}</p>
+                  <p class="card-text" style="font-weight: bold;">Employee Code: {{ employee.employee_code }}</p>
+                  <p class="card-text" style="font-weight: bold;">Email: {{ employee.email }}</p>
+                  <a href="{{ employee.upload.url }}" class="btn btn-primary" download>Download Photo</a>
+                  <p class="card-text" style="font-weight: bold;">Mobile Number: {{ employee.mobile_number }}</p>
+                  <p class="card-text" style="font-weight: bold;">Description: {{ employee.description }}</p>
+                  <p class="card-text" style="font-weight: bold;">Your Status: {{ employee.status }}</p>
+                  
+                  <!-- Buttons for updating status -->
+                  <form action="{% url 'update_status' %}" method="post" >
+                      {% csrf_token %}
+                      <input type="hidden" name="employee_id" value="{{ employee.id }}">
+                      <select name="status" style="font-weight: bold;">
+                          <option value="pending" >Pending</option>
+                          <option value="accept">Accept</option>
+                          <option value="reject">Reject</option>
+                      </select>
+                      <button type="submit" style="font-weight: bold;">Update Status</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock content %}
